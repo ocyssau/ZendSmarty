@@ -21,13 +21,9 @@ class SmartyRenderer extends PhpRenderer
      * @param array $extraParams
      * @return void
      */
-    public function __construct($tmplPath = null, $extraParams = array())
+    public function __construct($smartyEngine, $extraParams=array())
     {
-        $this->_smarty = new \Smarty;
-
-        if (null !== $tmplPath) {
-            $this->setScriptPath($tmplPath);
-        }
+        $this->_smarty = $smartyEngine;
 
         foreach ($extraParams as $key => $value) {
             $this->_smarty->$key = $value;
@@ -90,12 +86,12 @@ class SmartyRenderer extends PhpRenderer
      */
     public function __isset($key)
     {
-        return null !== $this->_smarty->getTemplateVars($key);
+        return null !== $this->_smarty->get_template_vars($key);
     }
     
     public function __get($key)
     {
-        return $this->_smarty->getTemplateVars($key);
+        return $this->_smarty->get_template_vars($key);
     }
 
     /**
@@ -190,7 +186,8 @@ class SmartyRenderer extends PhpRenderer
 	                $this->assign($k,$v);
 	            }
 	        }
-	        $this->file = $this->resolver($name);
+	        //$this->file = $this->resolver($name);
+	        $this->file = $name;
 	        $this->this = $this;
 	        return $this->getFilterChain()->filter($this->_smarty->fetch($this->file));
     	}
